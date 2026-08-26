@@ -63,6 +63,37 @@
     .role-badge.user    { background: #2d6cdf; }
     .role-badge.read-only { background: #5a6372; }
 
+    /* ── Visitor switcher ── */
+    .visitor-switcher {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #c8cfe0;
+    }
+
+    .visitor-switcher label {
+      white-space: nowrap;
+      opacity: 0.7;
+    }
+
+    .visitor-switcher select {
+      background: #2b2b45;
+      color: #fff;
+      border: 1px solid #3e3e60;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      outline: none;
+      max-width: 220px;
+    }
+
+    .visitor-switcher select:focus {
+      border-color: #2d6cdf;
+    }
+
     /* ── Main ── */
     main {
       flex: 1;
@@ -201,7 +232,15 @@
   <header>
     <div class="app-name">pizzaCRM &mdash; Test Page</div>
     <div class="user-info">
-      <span><i class="fas fa-user"></i> <span id="hdr-visitor"></span></span>
+      <div class="visitor-switcher">
+        <label for="visitor-select"><i class="fas fa-user-circle"></i> Visitor:</label>
+        <select id="visitor-select" onchange="switchVisitor(this.value)">
+          <option value="">— select —</option>
+          <option value="visitor1@BurnhamandRoot.com" data-account="Burnham and Root">visitor1@BurnhamandRoot.com</option>
+          <option value="visitor6@OuterInc.com"       data-account="Outer Inc">visitor6@OuterInc.com</option>
+          <option value="visitor1@CandorCorp.com"     data-account="Candor Corp">visitor1@CandorCorp.com</option>
+        </select>
+      </div>
       <span><i class="fas fa-building"></i> <span id="hdr-account"></span></span>
       <span id="hdr-role-badge"></span>
     </div>
@@ -278,12 +317,36 @@
   </div>
 
   <script>
-    // ── Populate header ───────────────────────────────────────────────────────
-    document.getElementById('hdr-visitor').textContent = window.userInfo.visitor;
+    // ── Visitor definitions ───────────────────────────────────────────────────
+    const knownVisitors = {
+      'visitor1@BurnhamandRoot.com': { account: 'Burnham and Root', role: 'admin' },
+      'visitor6@OuterInc.com':       { account: 'Outer Inc',        role: 'admin' },
+      'visitor1@CandorCorp.com':     { account: 'Candor Corp',      role: 'admin' },
+    };
+
+    // ── Populate header (initial state) ──────────────────────────────────────
     document.getElementById('hdr-account').textContent = window.userInfo.account;
 
     const badge = document.getElementById('hdr-role-badge');
     badge.innerHTML = `<span class="role-badge ${window.userInfo.role}">${window.userInfo.role}</span>`;
+
+    // ── Visitor switcher ──────────────────────────────────────────────────────
+    function switchVisitor(visitorId) {
+      if (!visitorId) return;
+
+      const info = knownVisitors[visitorId] || { account: 'Unknown', role: 'user' };
+
+      // Update header display
+      document.getElementById('hdr-account').textContent = info.account;
+      document.getElementById('hdr-role-badge').innerHTML =
+        `<span class="role-badge ${info.role}">${info.role}</span>`;
+
+      // Re-identify in Pendo
+      pendo.identify({
+        visitor: { id: visitorId, role: info.role },
+        account: { id: info.account }
+      });
+    }
 
     // ── Button actions ────────────────────────────────────────────────────────
     function openPage(url) {
