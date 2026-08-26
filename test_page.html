@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"/>
+  <meta name="robots" content="noindex"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet"/>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+  <title>Test Page</title>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: #f4f5f7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 0 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    header .app-name {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    header .user-info {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 13px;
+      color: #c8cfe0;
+    }
+
+    header .user-info span { display: flex; align-items: center; gap: 6px; }
+    header .user-info i { font-size: 12px; opacity: 0.7; }
+
+    .role-badge {
+      background: #2d6cdf;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .role-badge.admin   { background: #d04a3a; }
+    .role-badge.user    { background: #2d6cdf; }
+    .role-badge.read-only { background: #5a6372; }
+
+    /* ── Main ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 780px;
+    }
+
+    .action-btn {
+      background: #fff;
+      border: 2px solid #e0e4ea;
+      border-radius: 12px;
+      padding: 36px 20px;
+      font-family: 'Lato', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a2e;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .action-btn i {
+      font-size: 28px;
+      color: #2d6cdf;
+    }
+
+    .action-btn:hover {
+      border-color: #2d6cdf;
+      box-shadow: 0 4px 16px rgba(45,108,223,0.15);
+      transform: translateY(-2px);
+    }
+
+    .action-btn:active { transform: translateY(0); }
+
+    /* ── Modal overlay ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      padding: 32px;
+      width: 420px;
+      max-width: 90vw;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .modal h2 { font-size: 18px; margin-bottom: 12px; color: #1a1a2e; }
+    .modal p  { font-size: 14px; color: #5a6372; line-height: 1.6; }
+
+    .modal .close-btn {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: none; border: none;
+      font-size: 20px; cursor: pointer; color: #5a6372;
+    }
+
+    /* ── Popover ── */
+    .popover {
+      display: none;
+      position: fixed;
+      background: #fff;
+      border: 1px solid #e0e4ea;
+      border-radius: 10px;
+      padding: 16px 20px;
+      width: 260px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+      z-index: 200;
+      font-size: 13px;
+      color: #1a1a2e;
+    }
+    .popover.open { display: block; }
+    .popover h3 { font-size: 14px; margin-bottom: 8px; }
+    .popover p  { color: #5a6372; line-height: 1.5; }
+  </style>
+
+  <script>
+    // ── Read URL params (same pattern as index.html) ──────────────────────────
+    const urlParams   = new URLSearchParams(window.location.search);
+    const urlVisitor  = urlParams.get('visitor');
+    const urlAccount  = urlParams.get('account');
+    const urlRole     = urlParams.get('role');
+
+    // Fallback defaults when no params supplied
+    const visitor  = urlVisitor  || 'guest';
+    const account  = urlAccount  || 'Demo Account';
+    const role     = urlRole     || 'user';
+
+    window.userInfo = { visitor, account, role };
+
+    // ── Pendo init ────────────────────────────────────────────────────────────
+    (function(publicAppId) {
+      (function(p,e,n,d,o){var v,w,x,y,z;o=p[d]=p[d]||{};o._q=o._q||[];
+      v=['initialize','identify','updateOptions','pageLoad','track'];
+      for(w=0,x=v.length;w<x;++w)(function(m){o[m]=o[m]||function(){
+        o._q[m===v[0]?'unshift':'push']([m].concat([].slice.call(arguments,0)));
+      };})(v[w]);y=e.createElement(n);y.async=!0;
+      y.src='https://cdn.pendo.io/agent/static/'+publicAppId+'/pendo.js';
+      z=e.getElementsByTagName(n)[0];z.parentNode.insertBefore(y,z);
+      })(window,document,'script','pendo');
+
+      pendo.initialize({
+        visitor: { id: visitor + '@' + account.replace(/\s/g,'') + '.com', role: role },
+        account: { id: account }
+      });
+    })('88ddeb1f-3b0c-49de-b21a-08e20d82e408');
+  </script>
+</head>
+
+<body>
+
+  <!-- ── Header ── -->
+  <header>
+    <div class="app-name">pizzaCRM &mdash; Test Page</div>
+    <div class="user-info">
+      <span><i class="fas fa-user"></i> <span id="hdr-visitor"></span></span>
+      <span><i class="fas fa-building"></i> <span id="hdr-account"></span></span>
+      <span id="hdr-role-badge"></span>
+    </div>
+  </header>
+
+  <!-- ── Button grid ── -->
+  <main>
+    <div class="button-grid">
+
+      <button class="action-btn" id="btn-1" onclick="openPage()">
+        <i class="fas fa-external-link-alt"></i>
+        Open Page
+      </button>
+
+      <button class="action-btn" id="btn-2" onclick="openModal('modal-a')">
+        <i class="fas fa-window-maximize"></i>
+        Open Modal A
+      </button>
+
+      <button class="action-btn" id="btn-3" onclick="openModal('modal-b')">
+        <i class="fas fa-layer-group"></i>
+        Open Modal B
+      </button>
+
+      <button class="action-btn" id="btn-4" onclick="openPopover(this)">
+        <i class="fas fa-comment-dots"></i>
+        Open Popover
+      </button>
+
+      <button class="action-btn" id="btn-5" onclick="openModal('modal-c')">
+        <i class="fas fa-cog"></i>
+        Open Modal C
+      </button>
+
+      <button class="action-btn" id="btn-6" onclick="openPage('custom_index.html')">
+        <i class="fas fa-file-alt"></i>
+        Custom Page
+      </button>
+
+    </div>
+  </main>
+
+  <!-- ── Modal A ── -->
+  <div class="modal-overlay" id="modal-a" onclick="closeOnOverlay(event, 'modal-a')">
+    <div class="modal">
+      <button class="close-btn" onclick="closeModal('modal-a')">&times;</button>
+      <h2>Modal A</h2>
+      <p>This is Modal A. Add your content or Pendo guide target elements here.</p>
+    </div>
+  </div>
+
+  <!-- ── Modal B ── -->
+  <div class="modal-overlay" id="modal-b" onclick="closeOnOverlay(event, 'modal-b')">
+    <div class="modal">
+      <button class="close-btn" onclick="closeModal('modal-b')">&times;</button>
+      <h2>Modal B</h2>
+      <p>This is Modal B. Add your content or Pendo guide target elements here.</p>
+    </div>
+  </div>
+
+  <!-- ── Modal C ── -->
+  <div class="modal-overlay" id="modal-c" onclick="closeOnOverlay(event, 'modal-c')">
+    <div class="modal">
+      <button class="close-btn" onclick="closeModal('modal-c')">&times;</button>
+      <h2>Modal C</h2>
+      <p>This is Modal C. Add your content or Pendo guide target elements here.</p>
+    </div>
+  </div>
+
+  <!-- ── Popover ── -->
+  <div class="popover" id="popover-main">
+    <h3>Popover</h3>
+    <p>This is a popover. Add content or use it as a Pendo guide anchor.</p>
+  </div>
+
+  <script>
+    // ── Populate header ───────────────────────────────────────────────────────
+    document.getElementById('hdr-visitor').textContent = window.userInfo.visitor;
+    document.getElementById('hdr-account').textContent = window.userInfo.account;
+
+    const badge = document.getElementById('hdr-role-badge');
+    badge.innerHTML = `<span class="role-badge ${window.userInfo.role}">${window.userInfo.role}</span>`;
+
+    // ── Button actions ────────────────────────────────────────────────────────
+    function openPage(url) {
+      window.location.href = url || 'index.html';
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function closeOnOverlay(e, id) {
+      if (e.target === document.getElementById(id)) closeModal(id);
+    }
+
+    // Close modals with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
+        document.querySelectorAll('.popover.open').forEach(el => el.classList.remove('open'));
+      }
+    });
+
+    let popoverOpen = false;
+    function openPopover(btn) {
+      const pop = document.getElementById('popover-main');
+      if (popoverOpen) {
+        pop.classList.remove('open');
+        popoverOpen = false;
+        return;
+      }
+      const rect = btn.getBoundingClientRect();
+      pop.style.top  = (rect.bottom + 8 + window.scrollY) + 'px';
+      pop.style.left = (rect.left + window.scrollX)       + 'px';
+      pop.classList.add('open');
+      popoverOpen = true;
+    }
+
+    // Close popover on outside click
+    document.addEventListener('click', function(e) {
+      if (popoverOpen && !e.target.closest('#btn-4') && !e.target.closest('#popover-main')) {
+        document.getElementById('popover-main').classList.remove('open');
+        popoverOpen = false;
+      }
+    });
+  </script>
+
+</body>
+</html>
