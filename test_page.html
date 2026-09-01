@@ -142,55 +142,47 @@
 
     .action-btn:active { transform: translateY(0); }
 
-    /* ── Modal overlay ── */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-overlay.open { display: flex; }
-
-    .modal {
-      background: #fff;
+    /* ── Native dialog modals ── */
+    dialog {
+      border: none;
       border-radius: 12px;
       padding: 32px;
       width: 420px;
       max-width: 90vw;
       box-shadow: 0 12px 40px rgba(0,0,0,0.2);
       position: relative;
+      font-family: 'Lato', sans-serif;
     }
 
-    .modal h2 { font-size: 18px; margin-bottom: 12px; color: #1a1a2e; }
-    .modal p  { font-size: 14px; color: #5a6372; line-height: 1.6; }
+    dialog::backdrop {
+      background: rgba(0,0,0,0.45);
+    }
 
-    .modal .close-btn {
+    dialog h2 { font-size: 18px; margin-bottom: 12px; color: #1a1a2e; }
+    dialog p  { font-size: 14px; color: #5a6372; line-height: 1.6; }
+
+    dialog .close-btn {
       position: absolute;
       top: 14px; right: 16px;
       background: none; border: none;
       font-size: 20px; cursor: pointer; color: #5a6372;
     }
 
-    /* ── Popover ── */
-    .popover {
-      display: none;
-      position: fixed;
+    /* ── Popover API ── */
+    [popover] {
+      margin: 0;
       background: #fff;
       border: 1px solid #e0e4ea;
       border-radius: 10px;
       padding: 16px 20px;
       width: 260px;
       box-shadow: 0 6px 24px rgba(0,0,0,0.13);
-      z-index: 200;
+      font-family: 'Lato', sans-serif;
       font-size: 13px;
       color: #1a1a2e;
     }
-    .popover.open { display: block; }
-    .popover h3 { font-size: 14px; margin-bottom: 8px; }
-    .popover p  { color: #5a6372; line-height: 1.5; }
+    [popover] h3 { font-size: 14px; margin-bottom: 8px; }
+    [popover] p  { color: #5a6372; line-height: 1.5; }
   </style>
 
   <script>
@@ -209,11 +201,14 @@
 
     // ── Pendo init ────────────────────────────────────────────────────────────
     (function(publicAppId) {
-    (function(p,e,n,d,o){var v,w,x,y,z;o=p[d]=p[d]||{};o._q=o._q||[];
-    v=['initialize','identify','updateOptions','pageLoad','track','trackAgent'];for(w=0,x=v.length;w<x;++w)(function(m){
-        o[m]=o[m]||function(){o._q[m===v[0]?'unshift':'push']([m].concat([].slice.call(arguments,0)));};})(v[w]);
-        y=e.createElement(n);y.async=!0;y.src='https://cdn.pendo.io/agent/static/'+publicAppId+'/pendo.js';
-        z=e.getElementsByTagName(n)[0];z.parentNode.insertBefore(y,z);})(window,document,'script','pendo');
+      (function(p,e,n,d,o){var v,w,x,y,z;o=p[d]=p[d]||{};o._q=o._q||[];
+      v=['initialize','identify','updateOptions','pageLoad','track'];
+      for(w=0,x=v.length;w<x;++w)(function(m){o[m]=o[m]||function(){
+        o._q[m===v[0]?'unshift':'push']([m].concat([].slice.call(arguments,0)));
+      };})(v[w]);y=e.createElement(n);y.async=!0;
+      y.src='https://cdn.pendo.io/agent/static/'+publicAppId+'/pendo.js';
+      z=e.getElementsByTagName(n)[0];z.parentNode.insertBefore(y,z);
+      })(window,document,'script','pendo');
 
       pendo.initialize({
         visitor: { id: visitor + '@' + account.replace(/\s/g,'') + '.com', role: role },
@@ -281,34 +276,28 @@
   </main>
 
   <!-- ── Modal A ── -->
-  <div class="modal-overlay" id="modal-a" onclick="closeOnOverlay(event, 'modal-a')">
-    <div class="modal">
-      <button class="close-btn" onclick="closeModal('modal-a')">&times;</button>
-      <h2>Modal A</h2>
-      <p>This is Modal A. Add your content or Pendo guide target elements here.</p>
-    </div>
-  </div>
+  <dialog id="modal-a">
+    <button class="close-btn" onclick="closeModal('modal-a')">&times;</button>
+    <h2>Modal A</h2>
+    <p>This is Modal A. Add your content or Pendo guide target elements here.</p>
+  </dialog>
 
   <!-- ── Modal B ── -->
-  <div class="modal-overlay" id="modal-b" onclick="closeOnOverlay(event, 'modal-b')">
-    <div class="modal">
-      <button class="close-btn" onclick="closeModal('modal-b')">&times;</button>
-      <h2>Modal B</h2>
-      <p>This is Modal B. Add your content or Pendo guide target elements here.</p>
-    </div>
-  </div>
+  <dialog id="modal-b">
+    <button class="close-btn" onclick="closeModal('modal-b')">&times;</button>
+    <h2>Modal B</h2>
+    <p>This is Modal B. Add your content or Pendo guide target elements here.</p>
+  </dialog>
 
   <!-- ── Modal C ── -->
-  <div class="modal-overlay" id="modal-c" onclick="closeOnOverlay(event, 'modal-c')">
-    <div class="modal">
-      <button class="close-btn" onclick="closeModal('modal-c')">&times;</button>
-      <h2>Modal C</h2>
-      <p>This is Modal C. Add your content or Pendo guide target elements here.</p>
-    </div>
-  </div>
+  <dialog id="modal-c">
+    <button class="close-btn" onclick="closeModal('modal-c')">&times;</button>
+    <h2>Modal C</h2>
+    <p>This is Modal C. Add your content or Pendo guide target elements here.</p>
+  </dialog>
 
   <!-- ── Popover ── -->
-  <div class="popover" id="popover-main">
+  <div popover="auto" id="popover-main">
     <h3>Popover</h3>
     <p>This is a popover. Add content or use it as a Pendo guide anchor.</p>
   </div>
@@ -351,47 +340,34 @@
     }
 
     function openModal(id) {
-      document.getElementById(id).classList.add('open');
+      const dialog = document.getElementById(id);
+      dialog.showModal();
+      // Close on backdrop click (click lands on the <dialog> element itself)
+      dialog.addEventListener('click', function onBackdropClick(e) {
+        const rect = dialog.getBoundingClientRect();
+        const clickedBackdrop =
+          e.clientX < rect.left || e.clientX > rect.right ||
+          e.clientY < rect.top  || e.clientY > rect.bottom;
+        if (clickedBackdrop) {
+          dialog.close();
+          dialog.removeEventListener('click', onBackdropClick);
+        }
+      });
     }
 
     function closeModal(id) {
-      document.getElementById(id).classList.remove('open');
+      document.getElementById(id).close();
     }
 
-    function closeOnOverlay(e, id) {
-      if (e.target === document.getElementById(id)) closeModal(id);
-    }
-
-    // Close modals with Escape key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
-        document.querySelectorAll('.popover.open').forEach(el => el.classList.remove('open'));
-      }
-    });
-
-    let popoverOpen = false;
     function openPopover(btn) {
       const pop = document.getElementById('popover-main');
-      if (popoverOpen) {
-        pop.classList.remove('open');
-        popoverOpen = false;
-        return;
-      }
       const rect = btn.getBoundingClientRect();
-      pop.style.top  = (rect.bottom + 8 + window.scrollY) + 'px';
-      pop.style.left = (rect.left + window.scrollX)       + 'px';
-      pop.classList.add('open');
-      popoverOpen = true;
+      // Position below the button before showing
+      pop.style.top  = (rect.bottom + 8) + 'px';
+      pop.style.left = rect.left + 'px';
+      pop.togglePopover();
+      // Light dismiss (outside click) and Escape are handled natively
     }
-
-    // Close popover on outside click
-    document.addEventListener('click', function(e) {
-      if (popoverOpen && !e.target.closest('#btn-4') && !e.target.closest('#popover-main')) {
-        document.getElementById('popover-main').classList.remove('open');
-        popoverOpen = false;
-      }
-    });
   </script>
 
 </body>
