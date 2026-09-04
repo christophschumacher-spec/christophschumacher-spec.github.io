@@ -154,6 +154,18 @@
       font-family: 'Lato', sans-serif;
     }
 
+    #modal-a {
+      border: none;
+      border-radius: 12px;
+      padding: 32px;
+      width: 600px;
+      height: 800px;
+      max-width: 90vw;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+      position: center;
+      font-family: 'Lato', sans-serif;
+    }
+
     dialog::backdrop {
       background: rgba(0,0,0,0.45);
     }
@@ -280,6 +292,14 @@
     <button class="close-btn" onclick="closeModal('modal-a')">&times;</button>
     <h2>Modal A</h2>
     <p>This is Modal A. Add your content or Pendo guide target elements here.</p>
+    <div class="button-grid">
+      <button class="action-btn" id="md-btn-1">Modal Button 1</button>
+      <button class="action-btn" id="md-btn-2">Modal Button 2</button>
+      <button class="action-btn" id="md-btn-3">Modal Button 3</button>
+      <button class="action-btn" id="md-btn-4">Modal Button 4</button>
+      <button class="action-btn" id="md-btn-5">Modal Button 5</button>
+      <button class="action-btn" id="md-btn-6">Modal Button 6</button>
+    </div>
   </dialog>
 
   <!-- ── Modal B ── -->
