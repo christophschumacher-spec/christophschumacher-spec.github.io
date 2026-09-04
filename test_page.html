@@ -129,12 +129,30 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
 
+    .modal-action-btn {
+      background: #fff;
+      border: 2px solid #e0e4ea;
+      border-radius: 12px;
+      padding: 72px 20px;
+      font-family: 'Lato', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a2e;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
     .action-btn i {
       font-size: 28px;
       color: #2d6cdf;
     }
 
-    .action-btn:hover {
+    .action-btn:hover, .modal-action-btn:hover {
       border-color: #2d6cdf;
       box-shadow: 0 4px 16px rgba(45,108,223,0.15);
       transform: translateY(-2px);
@@ -162,7 +180,7 @@
       height: 800px;
       max-width: 90vw;
       box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-      position: center;
+      /* position: center; */
       font-family: 'Lato', sans-serif;
     }
 
@@ -293,12 +311,12 @@
     <h2>Modal A</h2>
     <p>This is Modal A. Add your content or Pendo guide target elements here.</p>
     <div class="button-grid">
-      <button class="action-btn" id="md-btn-1">Modal Button 1</button>
-      <button class="action-btn" id="md-btn-2">Modal Button 2</button>
-      <button class="action-btn" id="md-btn-3">Modal Button 3</button>
-      <button class="action-btn" id="md-btn-4">Modal Button 4</button>
-      <button class="action-btn" id="md-btn-5">Modal Button 5</button>
-      <button class="action-btn" id="md-btn-6">Modal Button 6</button>
+      <button class="modal-action-btn" id="md-btn-1">Modal Button 1</button>
+      <button class="modal-action-btn" id="md-btn-2">Modal Button 2</button>
+      <button class="modal-action-btn" id="md-btn-3">Modal Button 3</button>
+      <button class="modal-action-btn" id="md-btn-4">Modal Button 4</button>
+      <button class="modal-action-btn" id="md-btn-5">Modal Button 5</button>
+      <button class="modal-action-btn" id="md-btn-6">Modal Button 6</button>
     </div>
   </dialog>
 
