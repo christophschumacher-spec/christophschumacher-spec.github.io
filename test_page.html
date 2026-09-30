@@ -306,8 +306,15 @@
     </div>
     <div style="margin-top: 20px; display: flex; border: 2px solid #e0e4ea; border-radius: 12px; align-items: center; width: 40%; height: 300px; flex-direction: column; background-color: white;">
       <form style="display: flex; flex-flow: column; gap: 12px;">
+	      <!-- Original: padding on button -->
 	      <button class="gooey_uui_button" disabled="true" data-test-id="sales_order_create_new_order_button" type="submit" style="margin: 20px; display: inline-flex; position:relative; cursor: not-allowed; outline: none; padding: 7px 11px; border: 1px solid rgb(234, 236, 240); border-radius: 8px; font-family: Inter; font-size: 14px; font-weight: 600; color: rgb(152, 162, 179); background: rgb(242, 244, 247); box-shadow: rgba (16, 24, 40, 0.85) px 1px 2px 8px; line-height: 28px; transition: background-colg 0.15s ease-out; justify-content: center; align-items: center; gap: 4px; min-width: 0px; max-width: 100%;">
 		      <div style="display: flex; overflow: hidden; opacity: 1; justify-content: center; align-items: center; flex-grow: 1; width: 100%; height: 100%;">
+			      <div class="gooey_text" title="Create" style="padding-right: 2px; padding-left: 2px; font-family: Inter; font-size: 14px; font-weight: 600; line-height: 20px;">Create</div>
+		      </div>
+	      </button>
+	      <!-- Fixed: padding moved to child div -->
+	      <button class="gooey_uui_button" disabled="true" data-test-id="sales_order_create_new_order_button_v2" type="submit" style="margin: 20px; display: inline-flex; position:relative; cursor: not-allowed; outline: none; padding: 0; border: 1px solid rgb(234, 236, 240); border-radius: 8px; font-family: Inter; font-size: 14px; font-weight: 600; color: rgb(152, 162, 179); background: rgb(242, 244, 247); box-shadow: rgba (16, 24, 40, 0.85) px 1px 2px 8px; line-height: 28px; transition: background-colg 0.15s ease-out; justify-content: center; align-items: center; gap: 4px; min-width: 0px; max-width: 100%;">
+		      <div style="display: flex; overflow: hidden; opacity: 1; justify-content: center; align-items: center; flex-grow: 1; width: 100%; height: 100%; padding: 7px 11px;">
 			      <div class="gooey_text" title="Create" style="padding-right: 2px; padding-left: 2px; font-family: Inter; font-size: 14px; font-weight: 600; line-height: 20px;">Create</div>
 		      </div>
 	      </button>
